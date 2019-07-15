@@ -1,5 +1,4 @@
-package Squares;
-import Game.*;
+package squares;
 
 public class Pawn extends Piece{
 

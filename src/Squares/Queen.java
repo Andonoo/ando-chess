@@ -1,5 +1,4 @@
-package Squares;
-import Game.*;
+package squares;
 
 public class Queen extends Piece{
 
