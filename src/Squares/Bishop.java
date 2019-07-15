@@ -1,4 +1,5 @@
-package squares;
+package Squares;
+import Game.*;
 
 public class Bishop extends Piece{
 

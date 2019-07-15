@@ -1,4 +1,4 @@
-package squares;
+package Squares;
 
 public class Empty extends Square{
 

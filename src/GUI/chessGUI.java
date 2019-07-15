@@ -1,60 +1,65 @@
-package gui;
+package GUI;
 
-import game.BoardModel;
-import game.Game;
-import squares.*;
+import Game.Game;
+import Squares.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import game.SquareListener;
+import Game.squareListener;
 
-public class ChessGUI {
+public class chessGUI {
+
+    private int[] currentlySelected = new int[2];
     private JFrame mainFrame;
-    private JPanel boardPanel;
+    private JPanel gameControl;
     private JLabel leftFiller;
     private JLabel engineFeedback;
+    private Game myGame;
+    private JButton[][] boardSquares = new JButton[8][8];
 
     private GridBagConstraints boardConstraints = new GridBagConstraints();
     private GridBagConstraints panelConstraints = new GridBagConstraints();
 
-    private ImageIcon wPawn = new ImageIcon("icons/whitepawn.png");
-    private ImageIcon wRook = new ImageIcon("icons/whiterook.png");
-    private ImageIcon wKnight = new ImageIcon("icons/whiteknight.png");
-    private ImageIcon wBishop = new ImageIcon("icons/whitebishop.png");
-    private ImageIcon wQueen = new ImageIcon("icons/whitequeen.png");
-    private ImageIcon wKing = new ImageIcon("icons/whiteking.png");
-    private ImageIcon bPawn = new ImageIcon("icons/blackpawn.png");
-    private ImageIcon bRook = new ImageIcon("icons/blackrook.png");
-    private ImageIcon bKnight = new ImageIcon("icons/blackknight.png");
-    private ImageIcon bBishop = new ImageIcon("icons/blackbishop.png");
-    private ImageIcon bQueen = new ImageIcon("icons/blackqueen.png");
-    private ImageIcon bKing = new ImageIcon("icons/blackking.png");
+    private ImageIcon wPawn = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\whitepawn.png");
+    private ImageIcon wRook = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\whiterook.png");
+    private ImageIcon wKnight = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\whiteknight.png");
+    private ImageIcon wBishop = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\whitebishop.png");
+    private ImageIcon wQueen = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\whitequeen.png");
+    private ImageIcon wKing = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\whiteking.png");
+    private ImageIcon bPawn = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\blackpawn.png");
+    private ImageIcon bRook = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\blackrook.png");
+    private ImageIcon bKnight = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\blackknight.png");
+    private ImageIcon bBishop = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\blackbishop.png");
+    private ImageIcon bQueen = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\blackqueen.png");
+    private ImageIcon bKing = new ImageIcon("C:\\Users\\andre\\Documents\\Hobby code\\Chess (2019)\\Java Chess Icons\\blackking.png");
 
-    public ChessGUI(BoardModel boardModel) {
-        prepareGUI(boardModel);
+    public chessGUI(Game myGame) {
+        this.myGame = myGame;
+        prepareBoard();
     }
 
-    private void prepareGUI(BoardModel boardModel) {
-        // Initializing frame and panel
+    private void prepareBoard() {
+
+        // Initialising frame and panel
         mainFrame = new JFrame("Andrew's Chess");
         mainFrame.setSize(1600, 800);
         mainFrame.setLayout(new GridBagLayout());
         mainFrame.setResizable(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        boardPanel = new ChessBoardPanel(boardModel);
-        boardPanel.setSize(800, 800);
-        boardPanel.setLayout(new GridLayout(8, 8));
+        gameControl = new JPanel();
+        gameControl.setSize(800, 800);
+        gameControl.setLayout(new GridLayout(8, 8));
 
-        // Initializing window listener
+        // Initialising game listener
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
                 System.exit(0);
             }
         });
 
-        // Initializing feedback panel
+        // Initialising feedback panel
         engineFeedback = new JLabel("TODO");
         leftFiller = new JLabel("TODO");
 
@@ -74,36 +79,79 @@ public class ChessGUI {
          * Right empty box (for future functionality)
          */
         mainFrame.add(leftFiller, panelConstraints);
-        mainFrame.add(boardPanel, boardConstraints);
+        mainFrame.add(gameControl, boardConstraints);
         mainFrame.add(engineFeedback, panelConstraints);
         mainFrame.setVisible(true);
     }
 
     public void setGame() {
+
+        // Creating button objects (board squares)
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                JButton square = new JButton();
+                if (((i + j) % 2) == 0) {
+                    square.setBackground(Color.LIGHT_GRAY);
+                } else {
+                    square.setBackground(Color.DARK_GRAY);
+                }
+                boardSquares[i][j] = square;
+            }
+        }
+
         // Setting initial board pieces
         for (int i = 0; i < 8; i++) {
             boardSquares[1][i].setIcon(bPawn);
             boardSquares[6][i].setIcon(wPawn);
         }
+
         boardSquares[0][0].setIcon(bRook);
         boardSquares[0][7].setIcon(bRook);
         boardSquares[7][0].setIcon(wRook);
         boardSquares[7][7].setIcon(wRook);
+
         boardSquares[0][1].setIcon(bKnight);
         boardSquares[0][6].setIcon(bKnight);
         boardSquares[7][1].setIcon(wKnight);
         boardSquares[7][6].setIcon(wKnight);
+
         boardSquares[0][2].setIcon(bBishop);
         boardSquares[0][5].setIcon(bBishop);
         boardSquares[7][2].setIcon(wBishop);
         boardSquares[7][5].setIcon(wBishop);
+
         boardSquares[0][3].setIcon(bKing);
         boardSquares[7][3].setIcon(wKing);
+
         boardSquares[0][4].setIcon(bQueen);
         boardSquares[7][4].setIcon(wQueen);
+
+        // Setting button indexes (Linearly indexed from 1-64)
+        int x = 1;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                boardSquares[i][j].setActionCommand(Integer.toString(x));
+                x = x + 1;
+            }
+        }
+
+        // Setting button click listeners
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                boardSquares[i][j].addActionListener(new squareListener(myGame, i, j));
+            }
+        }
+
+        // Adding board of buttons to game control panel
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                gameControl.add(boardSquares[i][j]);
+            }
+        }
     }
 
     public void updateGUI(Square[][] myBoard) {
+
         // Looping through button array, updating GUI to any changed pieces.
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {

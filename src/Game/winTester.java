@@ -1,8 +1,8 @@
-package game;
+package Game;
 
-public class WinTester {
+public class winTester {
 
-    public int[] gameOver(BoardModel myBoard, char player) {
+    public int[] gameOver(Board myBoard, char player) {
         /* Implement code to test ALL possible checkMate conditions.
             * Returns integer array
             * int[0] represents whether a win condition has been met
