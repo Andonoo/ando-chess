@@ -5,37 +5,34 @@ import gui.ChessGUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class to represent an instance of a game of chess. Builds the model of the chess board,
+ * and passes it to the GUI for representation.
+ * 
+ * @author Andrew Donovan
+ *
+ */
 public class Game {
-    private BoardModel _gameBoard = new BoardModel();
-    private ChessGUI _gameGUI = new ChessGUI(this);
-
+    private BoardModel _gameBoard;
+    private ChessGUI _gameGUI;
+    
+    /**
+     * Constructs an instance of a chess game. 
+     */
     public Game() {
-        startGame();
+    	_gameBoard = new BoardModel();
+    	_gameGUI = new ChessGUI(_gameBoard);
     }
 
-    public static void main(String[] args) {
-        Game myGame = new Game();
-    }
-
+    /**
+     * Calls for the game board to be populated ready for play.
+     */
     private void startGame() {
     	_gameBoard.populateBoard();
-        _gameGUI.setGame();
     }
-
-    public void processInput(int i, int j){
-        // Testing if received button is a selected piece or a selected location
-        if (currentlySelected[0] == 9) {
-            currentlySelected[0] = i;
-            currentlySelected[1] = j;
-        } else {
-            // Testing whether selected move is valid and if so, moving the piece and resetting currently selected
-            // variable
-            if (gameBoard.makeMove(currentlySelected[0], currentlySelected[1], i, j)) {
-                currentlySelected[0] = 9;
-                currentlySelected[1] = 9;
-                myGUI.updateGUI(gameBoard.myBoard);
-            }
-
-        }
+    
+    public static void main(String[] args) {
+        Game myGame = new Game();
+        myGame.startGame();
     }
 }

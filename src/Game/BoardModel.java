@@ -1,70 +1,86 @@
 package game;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import gui.ChessBoardPanel;
+import gui.ChessSquare;
 import squares.*;
 
+/**
+ * Represents the model component in the MVC architecture. Holds the internal representation 
+ * of the game state and will update the views based on changes to this state. Also acts as a 
+ * listener to the user's interface in order to react to input.
+ * 
+ * @author Andrew Donovan
+ *
+ */
 public class BoardModel {
-    // Setting 'board' as 2D array of square. These will later be populated with empty spaces and pieces objects.
-    private Square[][] _myBoard;
-    private ChessBoardPanel _boardModelListener;
+    private List<Square> _myBoard;
+    private BoardModelListener _boardModelListener;
 
+    /**
+     * Creates the BoardModel instance, comprised of an array of Square instances. 
+     */
     public BoardModel() {
+    	_myBoard = new ArrayList<Square>();
     }
 
     /**
-     * Populates the game board with initial pieces.
+     * Populates the game board with initial Square instances, as a regular chess board would 
+     * be at the start of the game.
      */
     public void populateBoard() {
         // Setting board elements to EMPTY
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                _myBoard[row][col] = new Empty();
-            }
+        for (int i = 0; i < 64; i++) {
+               _myBoard.add(i, new Empty());
         }
-
         // Setting pieces
-        for (int col = 0; col < 8; col++) {
-            _myBoard[1][col] = new Pawn(1, col, 'b');
-            _myBoard[6][col] = new Pawn(6, col, 'w');
+        for (int i = 0; i < 64; i++) {
+            _myBoard.add(i+8, new Pawn(1, (i+8)%8, 'w'));
+            _myBoard.add(i+48, new Pawn(6, (i+8)%8, 'b'));
         }
-        _myBoard[0][0] = new Rook(0, 0, 'b');
-        _myBoard[0][7] = new Rook(0, 7, 'b');
-        _myBoard[7][0] = new Rook(7, 0, 'w');
-        _myBoard[7][7] = new Rook(7, 7, 'w');
-        _myBoard[0][1] = new Knight(0, 1, 'b');
-        _myBoard[0][6] = new Knight(0, 6, 'b');
-        _myBoard[7][1] = new Knight(7, 6, 'w');
-        _myBoard[7][6] = new Knight(7, 6, 'w');
-        _myBoard[0][2] = new Bishop(0, 2, 'b');
-        _myBoard[0][5] = new Bishop(0, 5, 'b');
-        _myBoard[7][2] = new Bishop(7, 2, 'w');
-        _myBoard[7][5] = new Bishop(7, 5, 'w');
-        _myBoard[0][3] = new King(0, 3, 'b');
-        _myBoard[7][3] = new King(7, 3, 'w');
-        _myBoard[0][4] = new Queen(0, 4, 'b');
-        _myBoard[7][4] = new Queen(7, 4, 'w');
-    }
-    
-    public boolean makeMove(int iInit, int jInit, int iFin, int jFin) {
-        // Testing whether desired movement is valid for the type of piece, and if so, moving the object to it's new
-        // location and replacing it's old location with an empty square
-        if (_myBoard[iInit][jInit].moveTest(iInit,jInit,iFin,jFin)) {
-            _myBoard[iFin][jFin] = _myBoard[iInit][jInit];
-            _myBoard[iInit][jInit] = new Empty();
-            return true;
-        }
-
-        return true;
+        _myBoard.add(0, new Rook(0, 0, 'w'));
+        _myBoard.add(7,new Rook(7, 0, 'w'));
+        _myBoard.add(56, new Rook(0, 7, 'b'));
+        _myBoard.add(63, new Rook(7, 7, 'b'));
+        _myBoard.add(1, new Knight(1, 0, 'w'));
+        _myBoard.add(6, new Knight(6, 0, 'w'));
+        _myBoard.add(57, new Knight(1, 7, 'b'));
+        _myBoard.add(62, new Knight(6, 7, 'b'));
+        _myBoard.add(2, new Bishop(2, 0, 'w'));
+        _myBoard.add(5, new Bishop(5, 0, 'w'));
+        _myBoard.add(58, new Bishop(2, 7, 'b'));
+        _myBoard.add(61, new Bishop(5, 7, 'b'));
+        _myBoard.add(4, new King(4, 0, 'w'));
+        _myBoard.add(59, new King(3, 7, 'b'));
+        _myBoard.add(3, new Queen(3, 0, 'w'));
+        _myBoard.add(60, new Queen(4, 7, 'b'));
     }
 
-	public void addBoardModelListener(Object o) {
-		
+    /**
+     * Adds a BoardModelListener to this BoardModel. These listeners will be updated
+     * of changes in the game state through their update() method. 
+     * @param listener to be notified of changes.
+     */
+	public void addBoardModelListener(BoardModelListener listener) {
+		_boardModelListener = listener;
 	}
 
-	public void selectionMade(int xCoord, int yCoord) {
-		
+	/**
+	 * Method called by user interface when they attempt to make a change to the game state.
+	 * This method takes 2 index positions which together represent the user's requested move.
+	 * It then updates the game state depending on what is appropriate as dictated by the game 
+	 * rules.
+	 * @param origin index of square selected first 
+	 * @param destination index of the square selected second
+	 */
+	public void moveAttempted(int origin, int destination) {
+		BoardModelEvent update = new BoardModelEvent();
+		update.addUpdate(origin, PieceType.EMPTY);
+		update.addUpdate(destination, PieceType.BKING);
+		_boardModelListener.update(update);
 	}
 }
 
