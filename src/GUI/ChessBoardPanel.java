@@ -14,6 +14,8 @@ import javax.swing.JPanel;
 import game.BoardModel;
 import game.BoardModelEvent;
 import game.BoardModelListener;
+import game.ChessMove;
+import game.Game;
 import game.PieceType;
 
 /**
@@ -27,7 +29,8 @@ import game.PieceType;
  */
 public class ChessBoardPanel extends JPanel implements BoardModelListener {
 	private List<ChessSquare> _squares; 
-	private BoardModel _boardModel; 
+	private Game _game; 
+	private BoardModel _boardModel;
 	private ChessSquareListener _buttonListener;
 	private ChessSquare _selected;
 	
@@ -36,7 +39,8 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 	 * adds itself as a listener to the passed boardModel. 
 	 * @param boardModel represents the game state which this panel should display.
 	 */
-	public ChessBoardPanel(BoardModel boardModel) {
+	public ChessBoardPanel(Game game, BoardModel boardModel) {
+		_game = game;
 		_boardModel = boardModel;
 		_boardModel.addBoardModelListener(this);
 		_buttonListener = new ChessSquareListener();
@@ -140,7 +144,7 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 				_selected.toggleSelected();
 			} else {
 				_selected.toggleSelected();
-				_boardModel.moveAttempted(_selected.getIndex(), selectIndex);
+				_game.moveAttempted(new ChessMove(_selected.getIndex(), selectIndex));
 				_selected = null;
 			}
 		}

@@ -1,24 +1,33 @@
 package squares;
 
-public class Pawn extends Piece{
+import game.ChessMove;
+import game.Player;
 
-    int x;
-    int y;
-    char player;
+public class Pawn extends Piece {
+	private boolean _firstMoveSpent;
+	
+    public Pawn(int x, int y, Player player) {
+		super(x, y, player);
+		_firstMoveSpent = false;
+	}
 
-    public Pawn(int x, int y, char player) {
-        this.x = x;
-        this.y = y;
-        this.player = player;
-    }
-
-    public boolean moveTest(int start_x, int start_y, int end_x, int end_y) {
+	public boolean moveTest(int start_x, int start_y, int end_x, int end_y) {
         return true;
     }
-
-    public String getType() {
-        String type;
-        type = String.format("%c"+ "Pawn", player);
-        return type;
-    }
+	
+	public boolean isValidMove(ChessMove move) {
+		int startX = getXCoord(move.getOrigin());
+		int starty = getXCoord(move.getOrigin());
+		int endX = getYCoord(move.getOrigin());
+		int endY = getYCoord(move.getOrigin());
+		if (!_firstMoveSpent) {
+			if (startX == endX && (starty == starty+1 || starty == starty+2)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if ((startX == endX))
+		}
+	}
 }

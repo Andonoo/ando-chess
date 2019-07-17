@@ -16,11 +16,11 @@ public class ChessGUI {
     private GridBagConstraints boardConstraints = new GridBagConstraints();
     private GridBagConstraints panelConstraints = new GridBagConstraints();
 
-    public ChessGUI(BoardModel boardModel) {
-        prepareGUI(boardModel);
+    public ChessGUI(Game game, BoardModel boardModel) {
+        prepareGUI(game, boardModel);
     }
 
-    private void prepareGUI(BoardModel boardModel) {
+    private void prepareGUI(Game game, BoardModel boardModel) {
         // Initializing frame and panel
         mainFrame = new JFrame("Andrew's Chess");
         mainFrame.setSize(1600, 800);
@@ -28,7 +28,7 @@ public class ChessGUI {
         mainFrame.setResizable(true);
         mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        boardPanel = new ChessBoardPanel(boardModel);
+        boardPanel = new ChessBoardPanel(game, boardModel);
         boardPanel.setSize(800, 800);
         boardPanel.setLayout(new GridLayout(8, 8));
 

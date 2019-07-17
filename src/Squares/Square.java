@@ -1,7 +1,13 @@
 package squares;
 
+import game.ChessMove;
+import game.Player;
+
 public abstract class Square {
-    public abstract String getType();
-    public abstract boolean moveTest(int iInit, int jInit, int iFin, int jFin);
+	public boolean isOccupiedBy(Player player) {
+    	return false;
+    }
+
+	public abstract boolean isValidMove(ChessMove move);
 }
 
