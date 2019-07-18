@@ -2,6 +2,7 @@ package rules;
 
 import game.BoardModel;
 import game.Move;
+import game.Player;
 
 /**
  * Interface for a game rule. Has the functionality to test whether the rule is broken, 
@@ -15,7 +16,7 @@ public interface Rule {
 	 * Determines if the rule has been broken.
 	 * @return
 	 */
-	public boolean isBroken(BoardModel board, Move move);
+	public boolean isBroken(BoardModel board, Move move, Player currentPlayer);
 	/**
 	 * @return a string detailing that this rule has been broken.
 	 */

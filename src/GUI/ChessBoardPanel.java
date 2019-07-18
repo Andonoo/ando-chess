@@ -16,6 +16,7 @@ import game.BoardModelEvent;
 import game.BoardModelListener;
 import game.ChessMove;
 import game.Game;
+import game.IllegalMoveError;
 import game.PieceType;
 
 /**
@@ -144,7 +145,11 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 				_selected.toggleSelected();
 			} else {
 				_selected.toggleSelected();
-				_game.moveAttempted(new ChessMove(_selected.getIndex(), selectIndex));
+				try {
+					_game.moveAttempted(new ChessMove(_selected.getIndex(), selectIndex));
+				} catch (IllegalMoveError ex) {
+					System.out.println(ex.getMessage());
+				}
 				_selected = null;
 			}
 		}

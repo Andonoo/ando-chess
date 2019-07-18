@@ -2,8 +2,11 @@ package game;
 
 
 import gui.ChessGUI;
+import rules.ChessPieceMoveRule;
+import rules.CurrentPlayerRule;
 import rules.Rule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +14,7 @@ import java.util.List;
  * Builds the model of the game board, and passes it to the GUI for representation.
  * 
  * @author Andrew Donovan
- *
+ * 
  */
 public class Game {
     private final BoardModel _gameBoard;
@@ -29,9 +32,19 @@ public class Game {
     	_gameGUI = new ChessGUI(this, _gameBoard);
     	_playerBlack = Player.BLACK;
     	_playerWhite = Player.WHITE;
+    	addRules();
     }
 
     /**
+     * Initializes the various game rules
+     */
+    private void addRules() {
+    	_gameRules = new ArrayList<Rule>();
+    	_gameRules.add(new ChessPieceMoveRule());
+    	_gameRules.add(new CurrentPlayerRule());
+	}
+
+	/**
      * Calls for the game board to be populated ready for play.
      */
     private void startGame() {
@@ -73,7 +86,7 @@ public class Game {
 	 */
 	public void moveAttempted(Move move) throws IllegalMoveError {
 		for (Rule r: _gameRules) {
-			if (r.isBroken(_gameBoard, move)) {
+			if (r.isBroken(_gameBoard, move, _playerTurn)) {
 				throw new IllegalMoveError(r.getErrorMessage());
 			}
 		}

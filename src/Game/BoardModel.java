@@ -1,5 +1,8 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Abstract class to represent the model of a game board in a turn based game 
  * such as chess.
@@ -8,7 +11,7 @@ package game;
  *
  */
 public abstract class BoardModel {
-	private BoardModelListener _boardModelListener;
+	protected List<BoardModelListener> _listeners = new ArrayList<BoardModelListener>();
 	
 	/**
      * Adds a BoardModelListener to this BoardModel. These listeners will be updated
@@ -16,7 +19,7 @@ public abstract class BoardModel {
      * @param listener to be notified of changes.
      */
 	public void addBoardModelListener(BoardModelListener listener) {
-		_boardModelListener = listener;
+		_listeners.add(listener);
 	}
 	
 	/**
@@ -39,4 +42,9 @@ public abstract class BoardModel {
 	 * @param move
 	 */
 	public abstract void makeMove(Move move);
+	
+	/**
+	 * Method called when any listeners need to be notified of changes in the board model.
+	 */
+	protected abstract void updateListeners(BoardModelEvent event);
 }

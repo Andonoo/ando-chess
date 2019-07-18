@@ -22,7 +22,7 @@ public class ChessBoardModel extends BoardModel{
     public ChessBoardModel() {
     	_board = new ArrayList<Square>();
     }
-
+    
     /**
      * Populates the game board with initial Square instances, as a regular chess board would 
      * be at the start of the game.
@@ -31,26 +31,26 @@ public class ChessBoardModel extends BoardModel{
         for (int i = 0; i < 64; i++) {
         	_board.add(i, new Empty());
         }
-        for (int i = 0; i < 64; i++) {
-        	_board.add(i+8, new Pawn(1, (i+8)%8, Player.WHITE));
-        	_board.add(i+48, new Pawn(6, (i+8)%8, Player.BLACK));
+        for (int i = 0; i < 8; i++) {
+        	_board.set(i+8, new Pawn(1, (i+8)%8, Player.WHITE));
+        	_board.set(i+48, new Pawn(6, (i+8)%8, Player.BLACK));
         }
-        _board.add(0, new Rook(0, 0, Player.WHITE));
-        _board.add(7,new Rook(7, 0, Player.WHITE));
-        _board.add(56, new Rook(0, 7, Player.BLACK));
-        _board.add(63, new Rook(7, 7, Player.BLACK));
-        _board.add(1, new Knight(1, 0, Player.WHITE));
-        _board.add(6, new Knight(6, 0, Player.WHITE));
-        _board.add(57, new Knight(1, 7, Player.BLACK));
-        _board.add(62, new Knight(6, 7, Player.BLACK));
-        _board.add(2, new Bishop(2, 0, Player.WHITE));
-        _board.add(5, new Bishop(5, 0, Player.WHITE));
-        _board.add(58, new Bishop(2, 7, Player.BLACK));
-        _board.add(61, new Bishop(5, 7, Player.BLACK));
-        _board.add(4, new King(4, 0, Player.WHITE));
-        _board.add(59, new King(3, 7, Player.BLACK));
-        _board.add(3, new Queen(3, 0, Player.WHITE));
-        _board.add(60, new Queen(4, 7, Player.BLACK));
+        _board.set(0, new Rook(0, 0, Player.WHITE));
+        _board.set(7,new Rook(7, 0, Player.WHITE));
+        _board.set(56, new Rook(0, 7, Player.BLACK));
+        _board.set(63, new Rook(7, 7, Player.BLACK));
+        _board.set(1, new Knight(1, 0, Player.WHITE));
+        _board.set(6, new Knight(6, 0, Player.WHITE));
+        _board.set(57, new Knight(1, 7, Player.BLACK));
+        _board.set(62, new Knight(6, 7, Player.BLACK));
+        _board.set(2, new Bishop(2, 0, Player.WHITE));
+        _board.set(5, new Bishop(5, 0, Player.WHITE));
+        _board.set(58, new Bishop(2, 7, Player.BLACK));
+        _board.set(61, new Bishop(5, 7, Player.BLACK));
+        _board.set(4, new King(4, 0, Player.WHITE));
+        _board.set(59, new King(3, 7, Player.BLACK));
+        _board.set(3, new Queen(3, 0, Player.WHITE));
+        _board.set(60, new Queen(4, 7, Player.BLACK));
     }
 
 	/**
@@ -73,7 +73,7 @@ public class ChessBoardModel extends BoardModel{
 	 * @return
 	 */
 	public boolean isValidPieceMove(ChessMove move) {
-		 return _board.get(move.getOrigin()).isValidMove(move);
+		 return _board.get(move.getOrigin()).isValidMovement(move);
 	}
 
 	/**
@@ -82,7 +82,23 @@ public class ChessBoardModel extends BoardModel{
 	 * @param move
 	 */
 	public void makeMove(Move move) {
-		
+		ChessMove chessMove = (ChessMove)move;
+		Square moved = _board.get(chessMove.getOrigin());
+		_board.set(chessMove.getOrigin(), new Empty());
+		_board.set(chessMove.getDestination(), moved);
+		BoardModelEvent event = new BoardModelEvent();
+		event.addUpdate(chessMove.getOrigin(), PieceType.EMPTY);
+		event.addUpdate(chessMove.getDestination(), moved.getType());
+		updateListeners(event);
+	}
+
+	/**
+	 * Method called when any listeners need to be notified of changes in the chess board model.
+	 */
+	protected void updateListeners(BoardModelEvent event) {
+		for (BoardModelListener l: _listeners) {
+			l.update(event);
+		}
 	}
 }
 

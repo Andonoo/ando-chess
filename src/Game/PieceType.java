@@ -1,5 +1,7 @@
 package game;
 
+import squares.Square;
+
 /**
  * Represents the various types which a square on a chess board should be able to take.
  * 
@@ -7,5 +9,5 @@ package game;
  *
  */
 public enum PieceType {
-	EMPTY, WPAWN, WKING, WBISHOP, WKNIGHT, WROOK, WQUEEN, BPAWN, BKING, BBISHOP, BKNIGHT, BROOK, BQUEEN;
+	EMPTY, WPAWN, WKING, WBISHOP, WKNIGHT, WROOK, WQUEEN, BPAWN, BKING, BBISHOP, BKNIGHT, BROOK, BQUEEN
 }
