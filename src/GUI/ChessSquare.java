@@ -10,6 +10,7 @@ import game.PieceType;
 public class ChessSquare extends JButton {
 	private int _index;
 	private boolean _selected;
+	private Color _defaultBackground;
 	private static ImageIcon wPawn = new ImageIcon("icons/whitepawn.png");
 	private static ImageIcon wRook = new ImageIcon("icons/whiterook.png");
 	private static ImageIcon wKnight = new ImageIcon("icons/whiteknight.png");
@@ -23,11 +24,15 @@ public class ChessSquare extends JButton {
 	private static ImageIcon bQueen = new ImageIcon("icons/blackqueen.png");
 	private static ImageIcon bKing = new ImageIcon("icons/blackking.png");
 	
-	
 	public ChessSquare(int index) {
 		super();
 		_index = index;
 		_selected = false;
+	}
+	
+	public void setBackground(Color color) {
+		super.setBackground(color);
+		_defaultBackground = color;
 	}
 
 	public void updateIcon(PieceType pieceType) {
@@ -81,8 +86,10 @@ public class ChessSquare extends JButton {
 	public void toggleSelected() {
 		if (_selected) {
 			_selected = false;
+			setBackground(_defaultBackground);
 		} else {
 			_selected = true;
+			setBackground(Color.YELLOW);
 		}
 	}
 }

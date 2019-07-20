@@ -28,10 +28,9 @@ import game.PieceType;
  * @author Andrew Donovan
  *
  */
-public class ChessBoardPanel extends JPanel implements BoardModelListener {
+public class ChessBoardPanel extends JPanel {
 	private List<ChessSquare> _squares; 
 	private Game _game; 
-	private BoardModel _boardModel;
 	private ChessSquareListener _buttonListener;
 	private ChessSquare _selected;
 	
@@ -40,14 +39,13 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 	 * adds itself as a listener to the passed boardModel. 
 	 * @param boardModel represents the game state which this panel should display.
 	 */
-	public ChessBoardPanel(Game game, BoardModel boardModel) {
+	public ChessBoardPanel(Game game) {
 		_game = game;
-		_boardModel = boardModel;
-		_boardModel.addBoardModelListener(this);
 		_buttonListener = new ChessSquareListener();
 		setBoardSquares();
 		_selected = null;
 		buildLayout();
+    	setSize(800, 800);
 	}
 	
 	/**

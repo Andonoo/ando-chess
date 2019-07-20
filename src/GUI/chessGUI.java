@@ -1,66 +1,58 @@
 package gui;
 
-import game.BoardModel;
+import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import game.BoardModelEvent;
+import game.BoardModelListener;
 import game.Game;
-import squares.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
-public class ChessGUI {
-    private JFrame mainFrame;
-    private JPanel boardPanel;
-    private JLabel leftFiller;
-    private JLabel engineFeedback;
+public class ChessGUI implements BoardModelListener {
+    private JFrame _mainFrame;
+    private ChessBoardPanel _boardPanel;
+    private JPanel _engineFeedback;
+    private JPanel _leftFiller;
 
-    private GridBagConstraints boardConstraints = new GridBagConstraints();
-    private GridBagConstraints panelConstraints = new GridBagConstraints();
-
-    public ChessGUI(Game game, BoardModel boardModel) {
-        prepareGUI(game, boardModel);
+    public ChessGUI(Game game) {
+    	createAndShowGUI(game);
     }
-
-    private void prepareGUI(Game game, BoardModel boardModel) {
-        // Initializing frame and panel
-        mainFrame = new JFrame("Andrew's Chess");
-        mainFrame.setSize(1600, 800);
-        mainFrame.setLayout(new GridBagLayout());
-        mainFrame.setResizable(true);
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        boardPanel = new ChessBoardPanel(game, boardModel);
-        boardPanel.setSize(800, 800);
-        boardPanel.setLayout(new GridLayout(8, 8));
-
-        // Initializing window listener
-        mainFrame.addWindowListener(new WindowAdapter() {
+    
+    /**
+     * Initializes and displays the chessGUI.
+     * @param game to be displayed by GUI.
+     */
+    private void createAndShowGUI(Game game) {
+    	// Initializing GUI frame
+    	_mainFrame = new JFrame("Andrew's Chess");
+    	_mainFrame.setLayout(new BorderLayout());
+    	_mainFrame.setResizable(true);
+    	_mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    	_mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
                 System.exit(0);
             }
         });
-
-        // Initializing feedback panel
-        engineFeedback = new JLabel("TODO");
-        leftFiller = new JLabel("TODO");
-
-        // Setting layout constraints
-        panelConstraints.gridwidth = 400;
-        panelConstraints.gridheight = 800;
-        panelConstraints.weightx = 2;
-        panelConstraints.weighty = 2;
-
-        boardConstraints.weighty = 1;
-        boardConstraints.weightx = 1;
-        boardConstraints.fill = 1;
-
-        /* Adding elements to frame in following order and applying gridbag constraints
-         * Left empty box (for future functionality)
-         * gameControl (chess board)
-         * Right empty box (for future functionality)
-         */
-        mainFrame.add(leftFiller, panelConstraints);
-        mainFrame.add(boardPanel, boardConstraints);
-        mainFrame.add(engineFeedback, panelConstraints);
-        mainFrame.setVisible(true);
+    	// Initializing GUI components
+    	_boardPanel = new ChessBoardPanel(game);
+    	_engineFeedback = new JPanel();
+    	_engineFeedback.setSize(400, 800);
+        _leftFiller = new JPanel();
+        _leftFiller.setSize(400, 800);
+        // Adding components to frame
+        _mainFrame.add(_leftFiller, BorderLayout.WEST);
+        _mainFrame.add(_boardPanel, BorderLayout.CENTER);
+        _mainFrame.add(_engineFeedback, BorderLayout.EAST);
+        _mainFrame.setVisible(true);
     }
+
+	/**
+	 * Updates the GUI based upon an update from the model.
+	 */
+	public void update(BoardModelEvent event) {
+		_boardPanel.update(event);
+	}
 }

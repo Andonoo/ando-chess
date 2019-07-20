@@ -28,8 +28,9 @@ public class Game {
      * Constructs an instance of a chess game. 
      */
     public Game() {
+    	_gameGUI = new ChessGUI(this);
     	_gameBoard = new ChessBoardModel();
-    	_gameGUI = new ChessGUI(this, _gameBoard);
+    	_gameBoard.addBoardModelListener(_gameGUI);
     	_playerBlack = Player.BLACK;
     	_playerWhite = Player.WHITE;
     	addRules();
