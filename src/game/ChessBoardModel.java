@@ -13,7 +13,7 @@ import squares.*;
  * @author Andrew Donovan
  *
  */
-public class ChessBoardModel extends BoardModel{
+public class ChessBoardModel extends BoardModel {
     private List<Square> _board;
     
     /**

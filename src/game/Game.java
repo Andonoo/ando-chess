@@ -17,23 +17,23 @@ import java.util.List;
  * 
  */
 public class Game {
+	private List<GameModelListener> _listeners = new ArrayList<GameModelListener>();
     private final BoardModel _gameBoard;
     private final ChessGUI _gameGUI;
-    private final Player _playerBlack;
-    private final Player _playerWhite;
     private List<Rule> _gameRules;
     private Player _playerTurn;
+    private boolean _pieceSelected;
+    private int _selection;
     
     /**
      * Constructs an instance of a chess game. 
      */
     public Game() {
-    	_gameGUI = new ChessGUI(this);
     	_gameBoard = new ChessBoardModel();
-    	_gameBoard.addBoardModelListener(_gameGUI);
-    	_playerBlack = Player.BLACK;
-    	_playerWhite = Player.WHITE;
+    	_gameGUI = new ChessGUI(this, _gameBoard);
+    	addGameModelListener(_gameGUI);
     	addRules();
+    	_pieceSelected = false;
     }
 
     /**
@@ -93,7 +93,52 @@ public class Game {
 		}
 		_gameBoard.makeMove(move);
 	}
-    
+	
+	/**
+	 * Method called by the GUI when the player attempts to make a selection on the game board.
+	 * Can either lead to a move on the game board, an initial piece selection or an error 
+	 * being thrown.
+	 * 
+	 * @param selectIndex
+	 * @throws IllegalMoveError
+	 */
+	public void selectionAttempted(int selectIndex) {
+		if (_pieceSelected) {
+			try {
+				moveAttempted(new ChessMove(_selection, selectIndex));
+				_selection = -1;
+				_pieceSelected = false;
+			} catch (IllegalMoveError e) {
+				updateListeners(new GameModelEvent(e.getMessage()));
+			}
+		} else {
+			if (_gameBoard.playerOccupies(_playerTurn, selectIndex)) {
+				_pieceSelected = true;
+				_selection = selectIndex;
+			} else {
+				updateListeners(new GameModelEvent("ERROR: Must select your own piece"));
+			}
+		}
+	}
+	
+	/**
+	 * Method called when any listeners need to be notified of changes in the chess board model.
+	 */
+	protected void updateListeners(GameModelEvent event) {
+		for (GameModelListener l: _listeners) {
+			l.update(event);
+		}
+	}
+	
+	/**
+     * Adds a GameModelListener to this Game model. These listeners will be updated
+     * of changes in the game state through their update() method. 
+     * @param listener to be notified of changes.
+     */
+	public void addGameModelListener(GameModelListener listener) {
+		_listeners.add(listener);
+	}
+
     public static void main(String[] args) {
         Game myGame = new Game();
         myGame.startGame();

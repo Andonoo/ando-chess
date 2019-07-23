@@ -7,25 +7,27 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import game.BoardModelEvent;
-import game.BoardModelListener;
+import game.GameModelListener;
 import game.Game;
+import game.GameModelEvent;
+import game.BoardModel;
+import game.BoardModelEvent;
 
-public class ChessGUI implements BoardModelListener {
+public class ChessGUI implements GameModelListener {
     private JFrame _mainFrame;
     private ChessBoardPanel _boardPanel;
     private JPanel _engineFeedback;
     private JPanel _leftFiller;
 
-    public ChessGUI(Game game) {
-    	createAndShowGUI(game);
+    public ChessGUI(Game game, BoardModel board) {
+    	createAndShowGUI(game, board);
     }
     
     /**
      * Initializes and displays the chessGUI.
      * @param game to be displayed by GUI.
      */
-    private void createAndShowGUI(Game game) {
+    private void createAndShowGUI(Game game, BoardModel board) {
     	// Initializing GUI frame
     	_mainFrame = new JFrame("Andrew's Chess");
     	_mainFrame.setLayout(new BorderLayout());
@@ -37,7 +39,7 @@ public class ChessGUI implements BoardModelListener {
             }
         });
     	// Initializing GUI components
-    	_boardPanel = new ChessBoardPanel(game);
+    	_boardPanel = new ChessBoardPanel(game, board);
     	_engineFeedback = new JPanel();
     	_engineFeedback.setSize(400, 800);
         _leftFiller = new JPanel();
@@ -52,7 +54,7 @@ public class ChessGUI implements BoardModelListener {
 	/**
 	 * Updates the GUI based upon an update from the model.
 	 */
-	public void update(BoardModelEvent event) {
-		_boardPanel.update(event);
+	public void update(GameModelEvent event) {
+		
 	}
 }

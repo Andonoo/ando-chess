@@ -30,7 +30,7 @@ public class ChessSquare extends JButton {
 		_selected = false;
 	}
 	
-	public void setBackground(Color color) {
+	public void setDefaultBackground(Color color) {
 		super.setBackground(color);
 		_defaultBackground = color;
 	}
@@ -87,6 +87,7 @@ public class ChessSquare extends JButton {
 		if (_selected) {
 			_selected = false;
 			setBackground(_defaultBackground);
+			System.out.println("ping");
 		} else {
 			_selected = true;
 			setBackground(Color.YELLOW);

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import game.BoardModel;
 import game.BoardModelEvent;
 import game.BoardModelListener;
+import game.GameModelListener;
 import game.ChessMove;
 import game.Game;
 import game.IllegalMoveError;
@@ -28,7 +29,7 @@ import game.PieceType;
  * @author Andrew Donovan
  *
  */
-public class ChessBoardPanel extends JPanel {
+public class ChessBoardPanel extends JPanel implements BoardModelListener {
 	private List<ChessSquare> _squares; 
 	private Game _game; 
 	private ChessSquareListener _buttonListener;
@@ -39,7 +40,8 @@ public class ChessBoardPanel extends JPanel {
 	 * adds itself as a listener to the passed boardModel. 
 	 * @param boardModel represents the game state which this panel should display.
 	 */
-	public ChessBoardPanel(Game game) {
+	public ChessBoardPanel(Game game, BoardModel board) {
+		board.addBoardModelListener(this);
 		_game = game;
 		_buttonListener = new ChessSquareListener();
 		setBoardSquares();
@@ -74,8 +76,10 @@ public class ChessBoardPanel extends JPanel {
             	square.addActionListener(_buttonListener);
                 if (((i + j) % 2) == 0) {
                     square.setBackground(Color.LIGHT_GRAY);
+                    square.setDefaultBackground(Color.LIGHT_GRAY);
                 } else {
                     square.setBackground(Color.DARK_GRAY);
+                    square.setDefaultBackground(Color.DARK_GRAY);
                 }
                 _squares.add(square);
                 linIndex++;
@@ -138,17 +142,24 @@ public class ChessBoardPanel extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent e) {
 			int selectIndex = ((ChessSquare)e.getSource()).getIndex();
+			_game.selectionAttempted(selectIndex);
+			
+			
+			
+			
+			
+			
+			
 			if (_selected == null) {
-				_selected = _squares.get(selectIndex);
-				_selected.toggleSelected();
+				
 			} else {
-				_selected.toggleSelected();
 				try {
 					_game.moveAttempted(new ChessMove(_selected.getIndex(), selectIndex));
+					_selected.toggleSelected();
+					_selected = null;
 				} catch (IllegalMoveError ex) {
 					System.out.println(ex.getMessage());
 				}
-				_selected = null;
 			}
 		}
 	}
