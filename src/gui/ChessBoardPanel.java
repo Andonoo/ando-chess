@@ -142,24 +142,10 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 		 */
 		public void actionPerformed(ActionEvent e) {
 			int selectIndex = ((ChessSquare)e.getSource()).getIndex();
-			_game.selectionAttempted(selectIndex);
-			
-			
-			
-			
-			
-			
-			
-			if (_selected == null) {
-				
-			} else {
-				try {
-					_game.moveAttempted(new ChessMove(_selected.getIndex(), selectIndex));
-					_selected.toggleSelected();
-					_selected = null;
-				} catch (IllegalMoveError ex) {
-					System.out.println(ex.getMessage());
-				}
+			try {
+				_game.selectionAttempted(selectIndex);
+			} catch (IllegalMoveError err) {
+				System.out.println(err.getMessage());
 			}
 		}
 	}

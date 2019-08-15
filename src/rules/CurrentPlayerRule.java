@@ -7,7 +7,7 @@ import game.Player;
 
 public class CurrentPlayerRule implements Rule {
 	public boolean isBroken(BoardModel board, Move move, Player currentPlayer) {
-		return board.playerOccupies(currentPlayer, ((ChessMove)move).getOrigin());
+		return !board.playerOccupies(currentPlayer, ((ChessMove)move).getOrigin());
 	}
 
 	public String getErrorMessage() {

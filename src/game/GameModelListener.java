@@ -15,5 +15,5 @@ public interface GameModelListener {
 	 * 
 	 * @param event details the changes which have occurred.
 	 */
-	void update(GameModelEvent event);
+	void update(ChessMoveEvent event);
 }

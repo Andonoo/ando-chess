@@ -9,14 +9,14 @@ import javax.swing.JPanel;
 
 import game.GameModelListener;
 import game.Game;
-import game.GameModelEvent;
 import game.BoardModel;
 import game.BoardModelEvent;
+import game.ChessMoveEvent;
 
 public class ChessGUI implements GameModelListener {
     private JFrame _mainFrame;
     private ChessBoardPanel _boardPanel;
-    private JPanel _engineFeedback;
+    private GameFeedbackPanel _engineFeedback;
     private JPanel _leftFiller;
 
     public ChessGUI(Game game, BoardModel board) {
@@ -40,7 +40,7 @@ public class ChessGUI implements GameModelListener {
         });
     	// Initializing GUI components
     	_boardPanel = new ChessBoardPanel(game, board);
-    	_engineFeedback = new JPanel();
+    	_engineFeedback = new GameFeedbackPanel();
     	_engineFeedback.setSize(400, 800);
         _leftFiller = new JPanel();
         _leftFiller.setSize(400, 800);
@@ -54,7 +54,7 @@ public class ChessGUI implements GameModelListener {
 	/**
 	 * Updates the GUI based upon an update from the model.
 	 */
-	public void update(GameModelEvent event) {
-		
+	public void update(ChessMoveEvent event) {
+		_engineFeedback.newTurn(event);
 	}
 }

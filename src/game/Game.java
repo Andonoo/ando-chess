@@ -34,6 +34,7 @@ public class Game {
     	addGameModelListener(_gameGUI);
     	addRules();
     	_pieceSelected = false;
+    	_playerTurn = Player.WHITE;
     }
 
     /**
@@ -81,6 +82,7 @@ public class Game {
 	 * This method takes 2 index positions which together represent the user's requested move.
 	 * The game state will be updated depending on what is appropriate as dictated by the game 
 	 * rules.
+	 * 
 	 * @param origin index of square selected first 
 	 * @param destination index of the square selected second
      * @throws IllegalMoveError 
@@ -102,21 +104,25 @@ public class Game {
 	 * @param selectIndex
 	 * @throws IllegalMoveError
 	 */
-	public void selectionAttempted(int selectIndex) {
+	public void selectionAttempted(int selectIndex) throws IllegalMoveError {
 		if (_pieceSelected) {
 			try {
 				moveAttempted(new ChessMove(_selection, selectIndex));
 				_selection = -1;
 				_pieceSelected = false;
+				newTurn();
+				ChessMoveEvent e = new ChessMoveEvent(_playerTurn);
+				updateListeners(e);
 			} catch (IllegalMoveError e) {
-				updateListeners(new GameModelEvent(e.getMessage()));
+				throw new IllegalMoveError("ERROR: Illegal move");
 			}
 		} else {
 			if (_gameBoard.playerOccupies(_playerTurn, selectIndex)) {
 				_pieceSelected = true;
 				_selection = selectIndex;
+				
 			} else {
-				updateListeners(new GameModelEvent("ERROR: Must select your own piece"));
+				throw new IllegalMoveError("ERROR: You must select your own piece");
 			}
 		}
 	}
@@ -124,7 +130,7 @@ public class Game {
 	/**
 	 * Method called when any listeners need to be notified of changes in the chess board model.
 	 */
-	protected void updateListeners(GameModelEvent event) {
+	protected void updateListeners(ChessMoveEvent event) {
 		for (GameModelListener l: _listeners) {
 			l.update(event);
 		}
