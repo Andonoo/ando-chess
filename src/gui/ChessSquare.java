@@ -7,6 +7,11 @@ import javax.swing.JButton;
 
 import game.PieceType;
 
+/**
+ * Class to represent one square on a chess board GUI. Also functions as a button for user input.
+ * 
+ * @author Andrew Donovan
+ */
 public class ChessSquare extends JButton {
 	private int _index;
 	private boolean _selected;
@@ -24,17 +29,29 @@ public class ChessSquare extends JButton {
 	private static ImageIcon bQueen = new ImageIcon("icons/blackqueen.png");
 	private static ImageIcon bKing = new ImageIcon("icons/blackking.png");
 	
+	/**
+	 * Creates an instance of a chess square and sets it's index position on the board.
+	 * @param index
+	 */
 	public ChessSquare(int index) {
 		super();
 		_index = index;
 		_selected = false;
 	}
 	
+	/**
+	 * Sets the non-selected background color of this piece.
+	 * @param color
+	 */
 	public void setDefaultBackground(Color color) {
 		super.setBackground(color);
 		_defaultBackground = color;
 	}
 
+	/**
+	 * Updates the icon of this piece to represent the piece provided
+	 * @param pieceType
+	 */
 	public void updateIcon(PieceType pieceType) {
 		switch(pieceType) {
 		case EMPTY:
@@ -79,18 +96,24 @@ public class ChessSquare extends JButton {
 		}
 	}
 
+	/**
+	 * Returns the index position of this piece on the chess board (0-63).
+	 * @return
+	 */
 	public int getIndex() {
 		return _index;
 	}  
 	
+	/**
+	 * Toggles the selection of this piece (highlighting).
+	 */
 	public void toggleSelected() {
 		if (_selected) {
 			_selected = false;
 			setBackground(_defaultBackground);
-			System.out.println("ping");
 		} else {
 			_selected = true;
-			setBackground(Color.YELLOW);
+			setBackground(new Color(240, 213, 108));
 		}
 	}
 }

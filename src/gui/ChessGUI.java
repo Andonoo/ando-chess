@@ -71,6 +71,9 @@ public class ChessGUI implements GameModelListener {
 			case SUCCESSFUL:
 				_engineFeedback.newTurn(event);
 				break;
+			case SELECTION:
+				_boardPanel.selectionMade(event.selectIndex());
+				break;
 		}
 	}
 }

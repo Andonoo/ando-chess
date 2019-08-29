@@ -93,6 +93,8 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 	 * individual squares and how they should be updated to represent the new game state.
 	 */
 	public void update(BoardModelEvent event) {
+		_selected.toggleSelected();
+		_selected = null;
 		List<Integer> indices = event.getUpdateIndices();
 		HashMap<Integer, PieceType> updates = event.getUpdates();
 		for (Integer i: indices) {
@@ -124,6 +126,15 @@ public class ChessBoardPanel extends JPanel implements BoardModelListener {
 		_squares.get(61).updateIcon(PieceType.BBISHOP);
 		_squares.get(62).updateIcon(PieceType.BKNIGHT);
 		_squares.get(63).updateIcon(PieceType.BROOK);
+	}
+	
+	/**
+	 * Sets the selected piece on the chess board.
+	 * @param selectIndex
+	 */
+	public void selectionMade(int selectIndex) {
+		_selected = _squares.get(selectIndex);
+		_selected.toggleSelected();
 	}
 	
 	/**

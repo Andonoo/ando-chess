@@ -12,7 +12,7 @@ import java.util.List;
 import game.ChessMoveEvent.EventType;
 
 /**
- * Class to represent an instance of a game (currently configured to be chess but could be easily modified). 
+ * Class to represent an instance of a game (currently configured to be chess but could be modified). 
  * Builds the model of the game board, and passes it to the GUI for representation.
  * 
  * @author Andrew Donovan
@@ -116,17 +116,17 @@ public class Game {
 				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.SUCCESSFUL);
 				updateListeners(event);
 			} catch (IllegalMoveError e) {
-				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.ILLEGAL); 
-				event.setErrorMessage(e.getMessage());
+				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.ILLEGAL, e.getMessage()); 
 				updateListeners(event);
 			}
 		} else {
 			if (_gameBoard.playerOccupies(_playerTurn, selectIndex)) {
 				_pieceSelected = true;
 				_selection = selectIndex;
+				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.SELECTION, selectIndex); 
+				updateListeners(event);
 			} else {
-				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.ILLEGAL); 
-				event.setErrorMessage("You must select your own piece");
+				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.ILLEGAL, "You must select your own piece"); 
 				updateListeners(event);
 			}
 		}
