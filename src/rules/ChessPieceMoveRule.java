@@ -12,6 +12,6 @@ public class ChessPieceMoveRule implements Rule {
 	}
 
 	public String getErrorMessage() {
-		return "ERROR: Move breaks piece restrictions";
+		return "Move breaks piece restrictions";
 	}
 }

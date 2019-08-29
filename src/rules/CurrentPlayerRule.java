@@ -11,6 +11,6 @@ public class CurrentPlayerRule implements Rule {
 	}
 
 	public String getErrorMessage() {
-		return "ERROR: You must select one of your own pieces";
+		return "You must select one of your own pieces";
 	}
 }

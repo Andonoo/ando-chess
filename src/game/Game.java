@@ -9,6 +9,8 @@ import rules.Rule;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.ChessMoveEvent.EventType;
+
 /**
  * Class to represent an instance of a game (currently configured to be chess but could be easily modified). 
  * Builds the model of the game board, and passes it to the GUI for representation.
@@ -104,25 +106,28 @@ public class Game {
 	 * @param selectIndex
 	 * @throws IllegalMoveError
 	 */
-	public void selectionAttempted(int selectIndex) throws IllegalMoveError {
+	public void selectionAttempted(int selectIndex) {
 		if (_pieceSelected) {
 			try {
 				moveAttempted(new ChessMove(_selection, selectIndex));
 				_selection = -1;
 				_pieceSelected = false;
 				newTurn();
-				ChessMoveEvent e = new ChessMoveEvent(_playerTurn);
-				updateListeners(e);
+				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.SUCCESSFUL);
+				updateListeners(event);
 			} catch (IllegalMoveError e) {
-				throw new IllegalMoveError("ERROR: Illegal move");
+				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.ILLEGAL); 
+				event.setErrorMessage(e.getMessage());
+				updateListeners(event);
 			}
 		} else {
 			if (_gameBoard.playerOccupies(_playerTurn, selectIndex)) {
 				_pieceSelected = true;
 				_selection = selectIndex;
-				
 			} else {
-				throw new IllegalMoveError("ERROR: You must select your own piece");
+				ChessMoveEvent event = new ChessMoveEvent(_playerTurn, EventType.ILLEGAL); 
+				event.setErrorMessage("You must select your own piece");
+				updateListeners(event);
 			}
 		}
 	}
